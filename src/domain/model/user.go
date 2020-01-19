@@ -35,7 +35,7 @@ type UserName struct {
 }
 
 func NewUserName(value string) (*UserName, error) {
-	if len(value) <= 2 {
+	if len(value) <= 1 {
 		return nil, errors.New("名前は2文字以上が必要です")
 	}
 	return &UserName{value: value}, nil

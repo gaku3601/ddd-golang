@@ -7,12 +7,16 @@ import (
 	"github.com/gaku3601/ddd-golang/src/domain/repository"
 )
 
+type UserUseCase interface {
+	RegisterUser(ctx context.Context, uid string, name string) error
+}
+
 type userUseCase struct {
 	userRepository repository.UserRepository
 }
 
-func NewUserUseCase(repository repository.UserRepository) *userUseCase {
-	return &userUseCase{userRepository: repository}
+func NewUserUseCase(repository repository.UserRepository) UserUseCase {
+	return &userUseCase{repository}
 }
 
 func (u *userUseCase) RegisterUser(ctx context.Context, uid string, name string) error {
