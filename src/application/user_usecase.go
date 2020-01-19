@@ -19,12 +19,12 @@ func NewUserUseCase(repository repository.UserRepository) UserUseCase {
 	return &userUseCase{repository}
 }
 
-func (u *userUseCase) RegisterUser(ctx context.Context, uid string, name string) error {
-	userName, err := model.NewUserName(name)
+func (u *userUseCase) RegisterUser(ctx context.Context, uid string, email string) error {
+	userEmail, err := model.NewUserEmail(email)
 	if err != nil {
 		return err
 	}
 	userUID := model.NewUserUID(uid)
-	user := model.NewUser(userUID, userName)
+	user := model.NewUser(userUID, userEmail)
 	return u.userRepository.Save(ctx, user)
 }

@@ -1,21 +1,19 @@
 package model
 
-import "errors"
-
 type User struct {
-	uid  *UserUID
-	name *UserName
+	uid   *UserUID
+	email *UserEmail
 }
 
-func NewUser(uid *UserUID, name *UserName) *User {
-	return &User{uid: uid, name: name}
+func NewUser(uid *UserUID, email *UserEmail) *User {
+	return &User{uid: uid, email: email}
 }
 
 func (u *User) UserUID() *UserUID {
 	return u.uid
 }
-func (u *User) UserName() *UserName {
-	return u.name
+func (u *User) UserName() *UserEmail {
+	return u.email
 }
 
 type UserUID struct {
@@ -30,17 +28,14 @@ func (u *UserUID) Value() string {
 	return u.value
 }
 
-type UserName struct {
+type UserEmail struct {
 	value string
 }
 
-func NewUserName(value string) (*UserName, error) {
-	if len(value) <= 1 {
-		return nil, errors.New("名前は2文字以上が必要です")
-	}
-	return &UserName{value: value}, nil
+func NewUserEmail(value string) (*UserEmail, error) {
+	return &UserEmail{value: value}, nil
 }
 
-func (u *UserName) Value() string {
+func (u *UserEmail) Value() string {
 	return u.value
 }
