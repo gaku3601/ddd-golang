@@ -18,7 +18,12 @@ func NewUserHandler(handler application.UserUseCase) UserHandler {
 }
 
 func (u *userHandler) CreateUser(ctx *gin.Context) {
-	if err := u.UserUseCase.RegisterUser(ctx, "uid", "ga"); err != nil {
+	createUserDto := &application.CreateUserDto{}
+	if err := ctx.BindJSON(createUserDto); err != nil {
+		ctx.String(400, err.Error())
+	}
+
+	if err := u.UserUseCase.RegisterUser(ctx, createUserDto); err != nil {
 		ctx.String(400, err.Error())
 	} else {
 		ctx.String(200, "success")

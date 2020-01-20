@@ -8,7 +8,7 @@ import (
 )
 
 type UserUseCase interface {
-	RegisterUser(ctx context.Context, uid string, name string) error
+	RegisterUser(ctx context.Context, dto *CreateUserDto) error
 }
 
 type userUseCase struct {
@@ -19,12 +19,10 @@ func NewUserUseCase(repository repository.UserRepository) UserUseCase {
 	return &userUseCase{repository}
 }
 
-func (u *userUseCase) RegisterUser(ctx context.Context, uid string, email string) error {
-	userEmail, err := model.NewUserEmail(email)
+func (u *userUseCase) RegisterUser(ctx context.Context, dto *CreateUserDto) error {
+	userEmail, err := model.NewUserEmail(dto.Email)
 	if err != nil {
 		return err
 	}
-	userUID := model.NewUserUID(uid)
-	user := model.NewUser(userUID, userEmail)
-	return u.userRepository.Save(ctx, user)
+	return u.userRepository.Save(ctx, userEmail, dto.Password)
 }

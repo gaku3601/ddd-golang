@@ -9,9 +9,8 @@ import (
 
 type UserRepository struct{}
 
-func (u *UserRepository) Save(ctx context.Context, user *model.User) error {
-	fmt.Println(ctx)
-	fmt.Println(user.UserUID().Value())
-	fmt.Println(user.UserName().Value())
+func (u *UserRepository) Save(ctx context.Context, userEmail *model.UserEmail, password string) error {
+	fmt.Println(userEmail.Value())
+	fmt.Println(password)
 	return nil
 }

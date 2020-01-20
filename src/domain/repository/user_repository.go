@@ -7,5 +7,5 @@ import (
 )
 
 type UserRepository interface {
-	Save(ctx context.Context, user *model.User) error
+	Save(ctx context.Context, email *model.UserEmail, password string) error
 }
