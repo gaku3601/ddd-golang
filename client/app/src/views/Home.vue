@@ -19,20 +19,66 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import HelloWorldComponent from "@/components/HelloWorld.vue";
+import {
+  CognitoUser,
+  AuthenticationDetails,
+  CognitoUserPool
+} from 'amazon-cognito-identity-js'
 
 @Component({
   components: {
     HelloWorldComponent
   }
 })
-export default class HelloWorld extends Vue {
+export default class Home extends Vue {
   @Prop() private msg!: string;
 
   id: string = "";
   password: string = "";
 
-  login(): void {
-    alert("id:" + this.id + " password:" + this.password);
+  async login(): Promise<void> {
+    const config = {
+      Region: "ap-northeast-1",
+      UserPoolId: "ap-northeast-1_M1GN89yEY",
+      ClientId: "12ctukdfeft90dsmtd20cef5b6",
+      IdentityPoolId: "arn:aws:cognito-idp:ap-northeast-1:982976011432:userpool/ap-northeast-1_M1GN89yEY"
+    };
+    const userData = { Username: this.id, Pool: new CognitoUserPool({
+      UserPoolId: config.UserPoolId,
+      ClientId: config.ClientId
+    })};
+    const cognitoUser = new CognitoUser(userData);
+    const authenticationData = { Username: this.id, Password: this.password };
+    const authenticationDetails = new AuthenticationDetails(authenticationData);
+    await  cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: (result) => {
+          // 実際にはクレデンシャルなどをここで取得する(今回は省略)
+          console.log("success");
+          console.log(result);
+          console.log(result.getIdToken().getJwtToken());
+          localStorage.setItem("token", result.getIdToken().getJwtToken());
+          this.$router.push({name: 'dashboard'});
+        },
+        onFailure: (err) => {
+          console.log("error");
+          console.log(err);
+        },
+        newPasswordRequired(userAttributes, requiredAttributes) {
+          //Force Change Password状態で、認証に成功した場合に呼ばれる。
+          console.log("newPasswordRequired()");
+          console.log(userAttributes, requiredAttributes);
+          cognitoUser.completeNewPasswordChallenge(authenticationData.Password, {}, {
+            onSuccess: (result) => {
+              console.log("success");
+              console.log(result);
+            },
+            onFailure: (err) => {
+              console.log("error");
+              console.log(err);
+            },
+          });
+        },
+      })
   }
 }
 </script>

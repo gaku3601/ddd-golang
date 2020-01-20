@@ -18,6 +18,12 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue")
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    meta: { requiresAuth: true },
+    component: () => import('@/views/Dashboard.vue'),
   }
 ];
 
@@ -25,6 +31,27 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  if (requiresAuth) {
+    // このルートはログインされているかどうか認証が必要です。
+    // もしされていないならば、ログインページにリダイレクトします。
+    const token = localStorage.getItem("token");
+    if (token === '') {
+      next({
+        name: 'home'
+      });
+      return
+    } else {
+      next();
+      return
+    }
+  } else {
+    next();
+    return
+  }
 });
 
 export default router;
