@@ -11,6 +11,11 @@ const routes = [
     component: Home
   },
   {
+    path: "/password_reset",
+    name: "password-reset",
+    component: () => import('@/views/PasswordReset.vue'),
+  },
+  {
     path: "/about",
     name: "about",
     // route level code-splitting

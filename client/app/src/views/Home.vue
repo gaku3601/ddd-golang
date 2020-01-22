@@ -12,6 +12,7 @@
         <button @click="login">login</button>
       </div>
     </div>
+    <router-link :to="{name: 'password-reset'}">パスワードリセット</router-link>
     <HelloWorldComponent msg="Welcome to Your Vue.js App" />
   </div>
 </template>
@@ -39,9 +40,9 @@ export default class Home extends Vue {
   async login(): Promise<void> {
     const config = {
       Region: "ap-northeast-1",
-      UserPoolId: "ap-northeast-1_M1GN89yEY",
-      ClientId: "12ctukdfeft90dsmtd20cef5b6",
-      IdentityPoolId: "arn:aws:cognito-idp:ap-northeast-1:982976011432:userpool/ap-northeast-1_M1GN89yEY"
+      UserPoolId: "ap-northeast-1_BHmB1pj9e",
+      ClientId: "7bmm4mkctc8b6nhbs2kpgs62bt",
+      IdentityPoolId: "arn:aws:cognito-idp:ap-northeast-1:982976011432:userpool/ap-northeast-1_BHmB1pj9e"
     };
     const userData = { Username: this.id, Pool: new CognitoUserPool({
       UserPoolId: config.UserPoolId,

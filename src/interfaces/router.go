@@ -16,7 +16,7 @@ func Router() *gin.Engine {
 	}
 	config.AllowHeaders = []string{"*"}
 	r.Use(cors.New(config))
-	userHandler := handler.NewUserHandler(application.NewUserUseCase(&infrastructure.UserRepository{}))
-	r.POST("/users", userHandler.CreateUser)
+	userHandler := handler.NewAdministratorHandler(application.NewAdministratorUseCase(&infrastructure.AdministratorRepository{}))
+	r.POST("/users", userHandler.CreateAdministrator)
 	return r
 }

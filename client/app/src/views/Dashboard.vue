@@ -6,9 +6,6 @@
         <input type="text" v-model="email" />
       </div>
       <div>
-        <input type="password" v-model="password" />
-      </div>
-      <div>
         <button @click="userCreate">ユーザを作成</button>
       </div>
     </div>
@@ -24,13 +21,11 @@ import axios from '@/util/axios'
 })
 export default class Dashboard extends Vue {
   email: string = '';
-  password: string = '';
 
   async userCreate(): Promise<void> {
     console.log('create');
     await axios.post('/users', {
       email: this.email,
-      password: this.password,
     });
   }
 }
