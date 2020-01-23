@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"fmt"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gaku3601/ddd-golang/src/application"
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +21,10 @@ func NewAdministratorHandler(handler application.AdministratorUseCase) Administr
 }
 
 func (u *administratorHandler) CreateAdministrator(ctx *gin.Context) {
+	token := ctx.MustGet("token")
+	claims := token.(*jwt.Token).Claims.(jwt.MapClaims)
+	fmt.Println(claims["cognito:username"])
+	fmt.Println(claims["custom:role"])
 	createUserDto := &application.CreateAdministratorDto{}
 	if err := ctx.BindJSON(createUserDto); err != nil {
 		ctx.String(400, err.Error())
