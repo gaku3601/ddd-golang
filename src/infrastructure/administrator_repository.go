@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/aws/aws-sdk-go/aws/credentials"
+
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +16,11 @@ import (
 type AdministratorRepository struct{}
 
 func (u *AdministratorRepository) Save(ctx context.Context, administrator *model.Administrator) error {
-	conf := &aws.Config{Region: aws.String("ap-northeast-1")}
+	// IAMロールでユーザを設定し、以下を設定する
+	// export AWS_ACCESS_KEY_ID=your access key id
+	// export AWS_SECRET_ACCESS_KEY=your secret key
+	creds := credentials.NewEnvCredentials()
+	conf := &aws.Config{Region: aws.String("ap-northeast-1"), Credentials: creds}
 	sess, err := session.NewSession(conf)
 	if err != nil {
 		panic(err)
